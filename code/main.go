@@ -1,13 +1,12 @@
 package main
 
 import (
+	"businessmatics.io/aliyun-ops/aliyun"
+	pi "businessmatics.io/aliyun-ops/aliyun/preemptibleInstance"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
-
-	"aliyun/clients"
-	"preemptibleInstance/event"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	gr "github.com/awesome-fc/golang-runtime"
@@ -42,7 +41,7 @@ func handler(ctx *gr.FCContext, eventByte []byte) ([]byte, error) {
 	fcLogger.Infof("event: %s", string(eventByte))
 
 	//对eventBod解y析, 得到实例的常用信息
-	var event event.Event
+	var event pi.Event
 	err = json.Unmarshal(eventByte, &event)
 	e("Unmarshal event", err)
 	fcLogger.Infof("event: %s", event)
@@ -64,7 +63,7 @@ func handler(ctx *gr.FCContext, eventByte []byte) ([]byte, error) {
 	fcLogger.Infof(" resionId: %s, instanceId: %s, instanceName: %s", regionId, instanceId, instanceName)
 
 	//ecs client
-	clients := clients.Clients{}
+	clients := aliyun.Clients{}
 	ecsCli := clients.GetECSClient()
 
 	//查询ecs实例的信息

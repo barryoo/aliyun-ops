@@ -1,4 +1,4 @@
-module example.com/m
+module businessmatics.io/aliyun-ops
 
 go 1.18
 
