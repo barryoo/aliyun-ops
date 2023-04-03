@@ -1,6 +1,6 @@
-package main
+package preemptibleinstance
 
-type event struct {
+type Event struct {
 	ServiceType     string       `json:"serviceType"`
 	Product         string       `json:"product"`
 	ResourceID      string       `json:"resourceId"`
@@ -14,7 +14,7 @@ type event struct {
 	EventRealnameEn string       `json:"eventRealnameEn"`
 	EventType       string       `json:"eventType"`
 	UserID          string       `json:"userId"`
-	Content         eventContent `json:"content"`
+	Content         EventContent `json:"content"`
 	CurLevel        string       `json:"curLevel"`
 	RegionID        string       `json:"regionId"`
 	EventTime       string       `json:"eventTime"`
@@ -24,7 +24,7 @@ type event struct {
 	Status          string       `json:"status"`
 }
 
-type eventContent struct {
+type EventContent struct {
 	InstanceID string `json:"instanceId"`
 	Action     string `json:"action"`
 }
