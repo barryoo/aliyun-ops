@@ -24,7 +24,6 @@ func AccessKeyID() string {
 	} else {
 		return accessKeyID
 	}
-
 }
 
 func AccessKeySecret() string {

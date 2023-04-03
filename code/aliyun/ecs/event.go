@@ -1,4 +1,4 @@
-package preemptibleinstance
+package ecs
 
 type Event struct {
 	ServiceType     string       `json:"serviceType"`
