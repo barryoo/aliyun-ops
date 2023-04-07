@@ -1,6 +1,9 @@
 package ecs
 
 import (
+	"log"
+	"testing"
+
 	"businessmatics.io/aliyun-ops/aliyun"
 	"businessmatics.io/aliyun-ops/asset"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
@@ -8,8 +11,6 @@ import (
 	"github.com/driftprogramming/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
-	"log"
-	"testing"
 )
 
 func init() {
@@ -22,7 +23,7 @@ func init() {
 
 func TestDetectInstanceTypes(t *testing.T) {
 
-	processor := NewProcessor(&gr.FCContext{}, Event{}, "eu-west-1", "i-d7o896vy5aehfawi7pwi")
+	processor := NewProcessor(&gr.FCContext{}, "eu-west-1", "i-d7o896vy5aehfawi7pwi")
 	processor.fcLogger = gr.GenLoggerByRequestID("1")
 	processor.clients = aliyun.Clients{}
 
