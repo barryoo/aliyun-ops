@@ -9,18 +9,31 @@
 | --- |  --- |   
 | 权限/策略 | AliyunFCFullAccess |  
 
-## 部署 & 体验
-
--  :fire:  通过 [Serverless 应用中心](https://fcnext.console.aliyun.com/applications/create?template=fc-custom-golang-event) ，
-[![Deploy with Severless Devs](https://img.alicdn.com/imgextra/i1/O1CN01w5RFbX1v45s8TIXPz_!!6000000006118-55-tps-95-28.svg)](https://fcnext.console.aliyun.com/applications/create?template=fc-custom-golang-event)  该应用。 
-
-
-- 通过 [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install) 进行部署：
+## 前提
+- 安装git
+- 安装serverless devs. 通过 [Serverless Devs Cli](https://www.serverless-devs.com/serverless-devs/install) 进行部署：
     - [安装 Serverless Devs Cli 开发者工具](https://www.serverless-devs.com/serverless-devs/install) ，并进行[授权信息配置](https://www.serverless-devs.com/fc/config) ；
-    - 初始化项目：`s init fc-custom-golang-event -d fc-custom-golang-event`   
-    - 进入项目，并进行项目部署：`cd fc-custom-golang-event && s deploy -y`
 
 > 注意: s deploy 之前的 actions 中 pre-deploy 中完成了编译， 如果编译过程中 go mod 下载很慢，可以考虑使用国内 go proxy 代理 [https://goproxy.cn/](https://goproxy.cn/)
+
+
+## 使用
+1. git clone 本项目
+2. 安装serverless devs
+3. 在 `code/asset/`目录下创建`.env`文件, 内容如下. 这是本项目调用aliyun ECS相关API的配置
+```
+aliyunRegionID = <aliyun regionId>
+aliyunAccessKeyID = <aliyun accessKeyId>
+aliyunAccessKeySecret = <aliyun accessKeySecret>
+```
+4. 在aliyun开通serverless FC
+5. 在项目录下执行 `s deploy -y` 部署项目到serverlss FC
+6. 在aliyun `云监控 - 事件监控 - 系统事件 - 事件报警规则`中创建规则, 填写表单如下:
+  * 产品类型:ecs
+  * 事件类型:状态通知
+  * 事件等级:警告
+  * 事件名称:抢占式实例中断通知
+  * 勾选`函数计算`, 选择刚才部署的函数
 
 ## 如何本地调试
 直接根据您的平台完成编译， 然后将目标二进制运行起来， 其实本质是启动了一个 http server，然后对这个  http server 发动 http 请求即可

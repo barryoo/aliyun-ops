@@ -273,7 +273,7 @@ func (p *Processor) createNewInstance(instance *ecs.Instance, imageId string, su
 	req.VSwitchId = instance.VpcAttributes.VSwitchId
 	req.InternetChargeType = instance.InternetChargeType
 	//公网带宽200M, 将会自动创建公网IP
-	req.InternetMaxBandwidthOut = requests.NewInteger(200)
+	req.InternetMaxBandwidthOut = requests.NewInteger(100)
 	//安全
 	req.PasswordInherit = requests.NewBoolean(true)
 	req.CreditSpecification = instance.CreditSpecification
