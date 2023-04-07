@@ -49,3 +49,13 @@ func TestDetectInstanceTypes(t *testing.T) {
 		logrus.Infof("found suitable InstanceType: %v", suitableResource)
 	}
 }
+
+func TestQueryImageStatus(t *testing.T) {
+	imageId := "m-d7o2t5141dlkx0j16xz6"
+
+	processor := NewProcessor(&gr.FCContext{}, "eu-west-1", "i-d7o896vy5aehfawi7pwi")
+	processor.fcLogger = gr.GenLoggerByRequestID("1")
+	processor.clients = aliyun.Clients{}
+
+	processor.describeImageStatus(imageId)
+}

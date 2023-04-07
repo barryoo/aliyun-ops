@@ -54,7 +54,7 @@ services:
       function:
         name: "preemptible-instance-interruption"
         description: 'aliun抢占式实例中断事件处理, 自动创建指定规则的新的抢占式实例'
-        timeout: 30
+        timeout: 600
         memorySize: 128
         runtime: custom
         codeUri: ./code/target

@@ -3,6 +3,7 @@ package ecs
 import (
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"strconv"
 	"time"
 
@@ -42,6 +43,9 @@ func NewProcessor(ctx *gr.FCContext, regionId string, instanceId string) *Proces
 func (p *Processor) Process() ([]byte, error) {
 	p.fcLogger.Infof(" resionId: %s, instanceId: %s", p.regionId, p.instanceId)
 	instance := p.describeInstance()
+	if instance.InstanceId == "" {
+		return nil, fmt.Errorf("can't find instance %s", p.instanceId)
+	}
 	p.describeInstanceStatus()
 
 	//查询可用区的实例规格
@@ -65,6 +69,8 @@ func (p *Processor) Process() ([]byte, error) {
 	createInstanceId := p.createNewInstance(&instance, imageId, suitableResource, disk)
 	if createInstanceId == "" {
 		return nil, fmt.Errorf("create new instance failed")
+	} else {
+		p.fcLogger.Infof("create new instance success, instanceId: %s", createInstanceId)
 	}
 
 	return []byte("success"), nil
@@ -109,7 +115,7 @@ func (p *Processor) createImage(instance ecs.Instance) string {
 	createImageRequest := ecs.CreateCreateImageRequest()
 	createImageRequest.RegionId = instance.RegionId
 	createImageRequest.InstanceId = instance.InstanceId
-	createImageRequest.ImageName = instance.InstanceName
+	createImageRequest.ImageName = instance.InstanceName + strconv.Itoa(int(rand.Int63n(100)))
 	ecsCli := p.clients.GetECSClient()
 	createImageRes, err := ecsCli.CreateImage(createImageRequest)
 	utils.P("CreateImage", err)
@@ -118,18 +124,24 @@ func (p *Processor) createImage(instance ecs.Instance) string {
 
 // 查询镜像的状态, 循环查询,直到镜像状态为Available, 则表示镜像创建成功, 否则等待5秒,继续查询镜像状态. 最多重试12次
 func (p *Processor) describeImageStatus(imageId string) (image ecs.Image, err error) {
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 30; i++ {
 		describeImagesRequest := ecs.CreateDescribeImagesRequest()
 		describeImagesRequest.RegionId = p.regionId
 		describeImagesRequest.ImageId = imageId
 		ecsCli := p.clients.GetECSClient()
 		describeImagesRes, err := ecsCli.DescribeImages(describeImagesRequest)
-		utils.P("DescribeImages", err)
-		if len(describeImagesRes.Images.Image) > 0 && describeImagesRes.Images.Image[0].Status == "Available" {
-			image = describeImagesRes.Images.Image[0]
-			return image, nil
+		if err != nil {
+			p.fcLogger.Infof("查询镜像状态失败, err: %s", err.Error())
+		} else if len(describeImagesRes.Images.Image) > 0 {
+			p.fcLogger.Infof("查询镜像状态, imageId: %s, status: %s", imageId, describeImagesRes.Images.Image[0].Status)
+			if describeImagesRes.Images.Image[0].Status == "Available" {
+				image = describeImagesRes.Images.Image[0]
+				return image, nil
+			}
+		} else {
+			p.fcLogger.Infof("查询镜像状态, imageId: %s, 未查询到镜像信息", imageId)
 		}
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 20)
 	}
 	return image, fmt.Errorf("createImage timeout, imageId: %s", imageId)
 }
@@ -260,12 +272,8 @@ func (p *Processor) createNewInstance(instance *ecs.Instance, imageId string, su
 	//网络
 	req.VSwitchId = instance.VpcAttributes.VSwitchId
 	req.InternetChargeType = instance.InternetChargeType
-	if instance.InternetMaxBandwidthIn > 0 {
-		req.InternetMaxBandwidthIn = requests.NewInteger(instance.InternetMaxBandwidthIn)
-	}
-	if instance.InternetMaxBandwidthOut > 0 {
-		req.InternetMaxBandwidthOut = requests.NewInteger(instance.InternetMaxBandwidthOut)
-	}
+	//公网带宽200M, 将会自动创建公网IP
+	req.InternetMaxBandwidthOut = requests.NewInteger(200)
 	//安全
 	req.PasswordInherit = requests.NewBoolean(true)
 	req.CreditSpecification = instance.CreditSpecification
