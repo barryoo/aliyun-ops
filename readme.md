@@ -48,7 +48,6 @@ $ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o target/main main.go
 $ curl 127.0.0.1:9000/invoke -d "my event" -H "x-fc-request-id:rid123456"
 ```
 
-
 ## 测试
 
 云监控 事件监控 抢占式实例终端通知事件数据样例
@@ -83,6 +82,27 @@ $ curl 127.0.0.1:9000/invoke -d "my event" -H "x-fc-request-id:rid123456"
 
 本地测试请求样例
 ```shell 
-curl -X POST http://localhost:9000 \  
--d '{"serviceType":"ECS","product":"ECS","resourceId":"acs:ecs:cn-shanghai:1537742922454562:instance/<resource-id>","ver":"1.0","eventRealname":"抢占式实例中断通知","instanceName":"instanceName","level":"WARN","resource":"","regionName":"eu-west-1","groupId":"","eventRealnameEn":"Instance:PreemptibleInstanceInterruption","eventType":"StatusNotification","userId":"1537742922454562","content":{"instanceId":"i-d7o6oaa1z4lpi4ekuf6k","action":"de***"},"curLevel":"WARN","regionId":"eu-west-1","eventTime":"20230401T180958.118+0800","name":"Instance:PreemptibleInstanceInterruption","ruleName":"抢占式实例中断事件报警","id":"771d443f-eeb0-4355-8578-dbf4d2dd81a6","status":"Normal"}'
+curl -X POST http://localhost:9000 -d '{"serviceType":"ECS","product":"ECS","resourceId":"acs:ecs:cn-shanghai:1537742922454562:instance/<resource-id>","ver":"1.0","eventRealname":"抢占式实例中断通知","instanceName":"instanceName","level":"WARN","resource":"","regionName":"eu-west-1","groupId":"","eventRealnameEn":"Instance:PreemptibleInstanceInterruption","eventType":"StatusNotification","userId":"1537742922454562","content":{"instanceId":"i-d7o896vy5aehfawi7pwi","action":"de***"},"curLevel":"WARN","regionId":"eu-west-1","eventTime":"20230401T180958.118+0800","name":"Instance:PreemptibleInstanceInterruption","ruleName":"抢占式实例中断事件报警","id":"771d443f-eeb0-4355-8578-dbf4d2dd81a6","status":"Normal"}'
 ```
+
+
+## 测试用例
+
+实例释放, 只有4会触发通知,且会自动购买新实例. 用于测试aliyun云监控通知事件触发.
+1. 按量付费实例释放
+2. 按量付费实例停机
+3. 抢占式实例手动释放
+4. 抢占式实例自动释放 (通过API模拟)
+5. 抢占式实例停机
+
+创建镜像
+* 通过API模式抢占式实例自动释放, 触发创建镜像. (测试结束后,删除该镜像)
+
+探测可用实例规格
+* 有库存的实例规格
+* 无库存的实例, 有多个相同内存, core不同
+* 无库存的实例, 有多个相同内存, core相同
+
+
+创建镜像
+* 查询可用镜像ID, 随便选取一个, 创建实例,创建IP, 绑定IP. (创建成功后, 释放实例, 释放IP)
