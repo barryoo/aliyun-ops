@@ -103,6 +103,5 @@ curl -X POST http://localhost:9000 -d '{"serviceType":"ECS","product":"ECS","res
 * 无库存的实例, 有多个相同内存, core不同
 * 无库存的实例, 有多个相同内存, core相同
 
-
 创建镜像
-* 查询可用镜像ID, 随便选取一个, 创建实例,创建IP, 绑定IP. (创建成功后, 释放实例, 释放IP)
+* 查询可用镜像ID, 随便选取一个, 创建实例

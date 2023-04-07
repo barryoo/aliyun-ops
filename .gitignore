@@ -141,7 +141,7 @@ gradlew.bat
 
 ### golang
 .env
-code/asset/.env
+**/.env
 
 ### serverless devs
 **/.s/**
