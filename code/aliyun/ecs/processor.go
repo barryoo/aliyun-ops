@@ -3,9 +3,10 @@ package ecs
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"strconv"
 	"time"
+
+	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 
 	"businessmatics.io/aliyun-ops/aliyun"
 	"businessmatics.io/aliyun-ops/utils"
@@ -23,16 +24,14 @@ type Processor struct {
 	// contains filtered or unexported fields
 	ctx        *gr.FCContext
 	fcLogger   *logrus.Entry
-	event      Event
 	regionId   string
 	instanceId string
 	clients    aliyun.Clients
 }
 
-func NewProcessor(ctx *gr.FCContext, event Event, regionId string, instanceId string) *Processor {
+func NewProcessor(ctx *gr.FCContext, regionId string, instanceId string) *Processor {
 	return &Processor{
 		ctx:        ctx,
-		event:      event,
 		regionId:   regionId,
 		instanceId: instanceId,
 		fcLogger:   ctx.GetLogger(),
@@ -47,7 +46,7 @@ func (p *Processor) Process() ([]byte, error) {
 
 	//查询可用区的实例规格
 	suitableResource := p.detectInstanceTypes(&instance)
-	if &suitableResource == nil {
+	if suitableResource.instanceType != "" {
 		return nil, fmt.Errorf("no suitable resource")
 	}
 	p.fcLogger.Infof("found suitable resource: %v", suitableResource)
@@ -160,7 +159,7 @@ func (p *Processor) detectInstanceTypes(instance *ecs.Instance) (suit suitableRe
 				}
 			}
 		}
-		if &sameInstanceTypeSuit != nil {
+		if sameInstanceTypeSuit.instanceType != "" {
 			suit = *sameInstanceTypeSuit
 			return
 		}
@@ -176,7 +175,7 @@ func (p *Processor) detectInstanceTypes(instance *ecs.Instance) (suit suitableRe
 	suits = p.findSuitableAvailableResource(req)
 	//查询具体配置,cpu memory
 	suits = p.queryInstanceTypeDetail(suits)
-	if &suits != nil && len(suits) > 0 {
+	if len(suits) > 0 {
 		//遍历suits
 		//找同memory的, 如果有, 则按照cpu排序, 优先cpu小的 zone相同的.  如果没有同memory的, 则放弃
 		var sameMemorySuit suitableResource
@@ -191,7 +190,7 @@ func (p *Processor) detectInstanceTypes(instance *ecs.Instance) (suit suitableRe
 				}
 			}
 		}
-		if &sameMemorySuit != nil {
+		if sameMemorySuit.instanceType != "" {
 			suit = sameMemorySuit
 			return
 		}

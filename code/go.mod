@@ -6,7 +6,6 @@ require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.266
 	github.com/awesome-fc/golang-runtime v0.0.0-20230119040721-3f65ab4b97d3
 	github.com/driftprogramming/godotenv v1.1.0
-	github.com/joho/godotenv v1.5.1
 	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.7.0
 )
