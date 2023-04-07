@@ -46,7 +46,7 @@ func (p *Processor) Process() ([]byte, error) {
 
 	//查询可用区的实例规格
 	suitableResource := p.detectInstanceTypes(&instance)
-	if suitableResource.instanceType != "" {
+	if suitableResource.instanceType == "" {
 		return nil, fmt.Errorf("no suitable resource")
 	}
 	p.fcLogger.Infof("found suitable resource: %v", suitableResource)

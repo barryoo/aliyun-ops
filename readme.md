@@ -53,36 +53,24 @@ $ curl 127.0.0.1:9000/invoke -d "my event" -H "x-fc-request-id:rid123456"
 云监控 事件监控 抢占式实例终端通知事件数据样例
 ```json
 {
-    "serviceType": "ECS",
     "product": "ECS",
-    "resourceId": "acs:ecs:cn-shanghai:1537742922454562:instance/<resource-id>",
-    "ver": "1.0",
-    "eventRealname": "抢占式实例中断通知",
-    "instanceName": "instanceName",
+    "resourceId": "acs:ecs:us-east-1:1537742922454562:instance/<resource-id>",
     "level": "WARN",
-    "resource": "",
-    "regionName": "eu-west-1",
-    "groupId": "",
-    "eventRealnameEn": "Instance:PreemptibleInstanceInterruption",
-    "eventType": "StatusNotification",
-    "userId": "1537742922454562",
+    "instanceName": "uk-prod006",
+    "regionId": "eu-west-1",
+    "groupId": "0",
+    "name": "Instance:PreemptibleInstanceInterruption",
     "content": {
         "instanceId": "i-d7o6oaa1z4lpi4ekuf6k",
         "action": "de***"
     },
-    "curLevel": "WARN",
-    "regionId": "eu-west-1",
-    "eventTime": "20230401T180958.118+0800",
-    "name": "Instance:PreemptibleInstanceInterruption",
-    "ruleName": "抢占式实例中断事件报警",
-    "id": "771d443f-eeb0-4355-8578-dbf4d2dd81a6",
     "status": "Normal"
 }
 ```
 
 本地测试请求样例
 ```shell 
-curl -X POST http://localhost:9000 -d '{"serviceType":"ECS","product":"ECS","resourceId":"acs:ecs:cn-shanghai:1537742922454562:instance/<resource-id>","ver":"1.0","eventRealname":"抢占式实例中断通知","instanceName":"instanceName","level":"WARN","resource":"","regionName":"eu-west-1","groupId":"","eventRealnameEn":"Instance:PreemptibleInstanceInterruption","eventType":"StatusNotification","userId":"1537742922454562","content":{"instanceId":"i-d7o896vy5aehfawi7pwi","action":"de***"},"curLevel":"WARN","regionId":"eu-west-1","eventTime":"20230401T180958.118+0800","name":"Instance:PreemptibleInstanceInterruption","ruleName":"抢占式实例中断事件报警","id":"771d443f-eeb0-4355-8578-dbf4d2dd81a6","status":"Normal"}'
+curl -X POST http://localhost:9000 -d '{"product":"ECS","resourceId":"acs:ecs:us-east-1:1537742922454562:instance/<resource-id>","level":"WARN","instanceName":"uk-prod006","regionId":"eu-west-1","groupId":"0","name":"Instance:PreemptibleInstanceInterruption","content":{"instanceId":"i-d7o6oaa1z4lpi4ekuf6k","action":"de***"},"status":"Normal"}'
 ```
 
 
