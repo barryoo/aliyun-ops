@@ -17,16 +17,16 @@
 # aliyun fc yaml配置说明 https://github.com/devsapp/fc/blob/main/docs/zh/yaml/readme.md
 edition: 1.0.0
 name: aliyun-ops
-# access 是当前应用所需要的密钥信息配置：
+# access 是当前应用所需要的密钥信息配置,如果不配置, 则在执行 `s deploy`时,可以手动选择或者创建.
 # 密钥配置可以参考：https://www.serverless-devs.com/serverless-devs/command/config
 # 密钥使用顺序可以参考：https://www.serverless-devs.com/serverless-devs/tool#密钥使用顺序与规范
-access: "aliyun-sq-chenpeng-01"
+access: ""
 
 vars: # 全局变量
   region: "eu-west-1"
   service:
     name: "ecs"
-    description: 'aliyun ops by serverless devs'
+    description: "aliyun ops by serverless devs"
 
 services:
   ecs: # 业务名称/模块名称
@@ -53,15 +53,14 @@ services:
       service: ${vars.service}
       function:
         name: "preemptible-instance-interruption"
-        description: 'aliun抢占式实例中断事件处理, 自动创建指定规则的新的抢占式实例'
+        description: "aliun抢占式实例中断事件处理, 自动创建指定规则的新的抢占式实例"
         timeout: 600
         memorySize: 128
         runtime: custom
         codeUri: ./code/target
         customRuntimeConfig:
           command:
-            - '/code/main'
-
+            - "/code/main"
 #  next-function: # 第二个函数的案例，仅供参考
 #    # 如果在当前项目下执行 s deploy，会同时部署模块：
 #    #   helloworld：服务hello-world-service，函数cpp-event-function

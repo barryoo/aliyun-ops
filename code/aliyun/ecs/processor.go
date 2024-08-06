@@ -72,6 +72,7 @@ func (p *Processor) Process() ([]byte, error) {
 	} else {
 		p.fcLogger.Infof("create new instance success, instanceId: %s", createInstanceId)
 	}
+	//todo 如果原实例有外网IP, 则将新实例的外网IP绑定到原实例
 
 	return []byte("success"), nil
 }

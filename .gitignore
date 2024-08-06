@@ -135,10 +135,6 @@ build/
 gradlew
 gradlew.bat
 
-### 数潜java项目 ###
-**/**-local.**
-
-
 ### golang
 .env
 **/.env
