@@ -1,6 +1,7 @@
-# aliyun-ops
-
-快速部署一个基于custom runtime 的 Golang Event 类型的 `aliyun抢占式实例自动维护` 到阿里云函数计算
+# alyun-ops 帮助文档
+如果你想以超低成本使用云服务器, 这个项目可以帮助你实现.
+快速部署一个基于custom runtime 的 Golang Event 类型的 `aliyun抢占式实例自动维护` 到阿里云函数计算.
+使用免费的aliyun serverless 自动维护低价抢占式实例.
 当前仅支持aliyun serverless, 暂不支持其他云服务商.
 
 ## 功能
